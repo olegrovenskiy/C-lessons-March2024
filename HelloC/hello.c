@@ -12,6 +12,8 @@ int inputDirection();
 bool inputCoordinate(int* y, int* x);
 void CreationShipsPerson(char A[10][10], char B[10][10]);
 
+bool CheckUdarPerson(char A[10][10], int y, int x);
+
 
 
 void main()              
@@ -41,6 +43,23 @@ void main()
 
     printf("   All ships are created\n");
     printf("   Startuem fire!!! First udar from Person\n");
+
+
+    int y;
+    int x;
+
+    while (1)
+
+    {
+        if (inputCoordinate(&y, &x))
+            CheckUdarPerson(A, y,x);
+
+
+
+        PrintPole(A, B);
+
+    }
+
 
 
 }
@@ -341,4 +360,20 @@ void CreationShipsComputer(char A[10][10])
            }
        }
      }
+ }
+
+ bool CheckUdarPerson(char A[10][10], int y, int x)
+ {
+     if (A[y][x] == ' '||A[y][x] == '.')
+         {
+           A[y][x] = 'o';
+           return false;
+         }
+
+     else if (A[y][x] == 'Y')
+         {
+             A[y][x] = 'X';
+             return true;
+         }
+
  }
