@@ -3,6 +3,8 @@
 #include <time.h>
 
 
+// udarPC(B, &udarY, &udarX); //udar computera cherez function
+
 //function udara computera
 void udarPC(char Matrix[10][10], int* y, int* x)
 
