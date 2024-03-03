@@ -279,11 +279,13 @@ void CreationShipsComputer(char A[10][10])
      int direction;
      int y;
      int x;
-     int inputShepPersonQ = 0;
+     int inputShipPersonQ = 0;
      bool shipPersonOK;
 
      for (int k = 0; k < 10; k++)
      {
+       
+       printf("   Input %d - palubny ship\n", ship[inputShipPersonQ]);
 
        shipPersonOK = false;
 
@@ -291,7 +293,7 @@ void CreationShipsComputer(char A[10][10])
        {
            bool coordOK;
 
-           if (inputShepPersonQ < 6)
+           if (inputShipPersonQ < 6)
                direction = inputDirection();
            else
                direction = 0;
@@ -302,25 +304,25 @@ void CreationShipsComputer(char A[10][10])
                coordOK = inputCoordinate(&y, &x);
                shipPersonOK = true;
 
-               for (int i = 0; i < ship[inputShepPersonQ]; i++)
+               for (int i = 0; i < ship[inputShipPersonQ]; i++)
                {
                    if (B[y][x + i] != ' ')
                        shipPersonOK = false;
                }
 
-               if (shipPersonOK == true && coordOK && x < (11 - ship[inputShepPersonQ]))
+               if (shipPersonOK == true && coordOK && x < (11 - ship[inputShipPersonQ]))
                {
-                   for (int i = 0; i < ship[inputShepPersonQ]; i++)
+                   for (int i = 0; i < ship[inputShipPersonQ]; i++)
                    {
 
                        B[y][x + i] = 'Y';
 
                        // stroim zonu vokrug
 
-                       ZoneAroundShip(B, direction, y, x, ship[inputShepPersonQ]);
+                       ZoneAroundShip(B, direction, y, x, ship[inputShipPersonQ]);
 
                    }
-                   inputShepPersonQ++;
+                   inputShipPersonQ++;
 
                    PrintPole(A, B);
                }
@@ -334,23 +336,23 @@ void CreationShipsComputer(char A[10][10])
            {
                coordOK = inputCoordinate(&y, &x);
                shipPersonOK = true;
-               for (int i = 0; i < ship[inputShepPersonQ]; i++)
+               for (int i = 0; i < ship[inputShipPersonQ]; i++)
                {
                    if (B[y+i][x] != ' ')
                        shipPersonOK = false;
                }
 
-               if (shipPersonOK == true && coordOK && x < (11 - ship[inputShepPersonQ]))
+               if (shipPersonOK == true && coordOK && x < (11 - ship[inputShipPersonQ]))
                {
-                   for (int i = 0; i < ship[inputShepPersonQ]; i++)
+                   for (int i = 0; i < ship[inputShipPersonQ]; i++)
                    {
 
                        B[y+i][x] = 'Y';
 
-                       ZoneAroundShip(B, direction, y, x, ship[inputShepPersonQ]);
+                       ZoneAroundShip(B, direction, y, x, ship[inputShipPersonQ]);
 
                    }
-                   inputShepPersonQ++;
+                   inputShipPersonQ++;
 
                    PrintPole(A, B);
                }
