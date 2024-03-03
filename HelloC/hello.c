@@ -29,7 +29,6 @@ void main()
     for (int i = 0; i < 100; i++)
         *(addrA + i) = ' ';
 
-
     for (int i = 0; i < 100; i++)
         *(addrB + i) = ' ';
 
@@ -86,30 +85,18 @@ void PrintPole(char A[10][10], char B[10][10])
 void CreationShipsComputer(char A[10][10])
  {
 
-    // creation ships computer
-
-
     int shep[10] = { 4,3,3,2,2,2,1,1,1,1 };
-
-    int coordY;
-    int coordX;
-    int direcU;
 
     srand(time(NULL));
 
     for (int k = 0; k < 10; k++)
-    {
-        
+    {        
         ShipCreatorPC(A, shep[k]);     
- 
     }
  }
 
  void ZoneAroundShip(char A[10][10], int direcU, int coordY, int coordX, int K)
  {
-
-     // stroim zonu vokrug shep
-
      if (direcU == 1)
      {
          for (int i = 0; i < (K + 2); i++)
@@ -139,15 +126,11 @@ void CreationShipsComputer(char A[10][10])
          if (((coordX + K) >= 0) && ((coordX + K) <= 9))
              A[coordY][coordX + K] = '.';
      }
-
-
-
  }
 
 
  void ShipCreatorPC(char A[10][10], int K) 
  {
-
      srand(time(NULL));
 
      int coordY;
@@ -158,7 +141,6 @@ void CreationShipsComputer(char A[10][10])
 
      while (shepOK == 0)
      {
-
          coordY = rand() % (10 - K);
          coordX = rand() % (10 - K);
          direcU = rand() & 0x1;
@@ -209,7 +191,6 @@ void CreationShipsComputer(char A[10][10])
 
      ZoneAroundShip(A, direcU, coordY, coordX, K);
 
-
  }
 
  int inputDirection()
@@ -245,7 +226,6 @@ void CreationShipsComputer(char A[10][10])
      int yy;
      int xx;
 
-
      printf("\n   Enter coordinats [e.g. 'a6']    ");
      fgets(Buffer, 99, stdin);
 
@@ -274,7 +254,6 @@ void CreationShipsComputer(char A[10][10])
  }
 
  
-
  void CreationShipsPerson(char A[10][10], char B[10][10])
  {
      int ship[10] = { 4,3,3,2,2,2,1,1,1,1 };
@@ -319,13 +298,11 @@ void CreationShipsComputer(char A[10][10])
 
                        B[y][x + i] = 'Y';
 
-                       // stroim zonu vokrug
-
                        ZoneAroundShip(B, direction, y, x, ship[inputShipPersonQ]);
 
                    }
-                   inputShipPersonQ++;
 
+                   inputShipPersonQ++;
                    PrintPole(A, B);
                }
 
@@ -339,6 +316,7 @@ void CreationShipsComputer(char A[10][10])
                coordOK = inputCoordinate(&y, &x);
                shipPersonOK = true;
                for (int i = 0; i < ship[inputShipPersonQ]; i++)
+
                {
                    if (B[y+i][x] != ' ')
                        shipPersonOK = false;
@@ -350,32 +328,17 @@ void CreationShipsComputer(char A[10][10])
                    {
 
                        B[y+i][x] = 'Y';
-
                        ZoneAroundShip(B, direction, y, x, ship[inputShipPersonQ]);
 
                    }
                    inputShipPersonQ++;
-
                    PrintPole(A, B);
                }
 
                else
                    printf("   Input NOT CORRECT PLEASE REPEAT!!!\n");
 
-
-
            }
-
        }
-
-
-
-
      }
-
-
-
-
-
-
  }
