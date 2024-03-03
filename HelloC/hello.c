@@ -35,6 +35,10 @@ void main()
         *(addrB + i) = ' ';
 
 
+    int ShipQtyPerson = 20;
+    int ShipQtyPC = 20;
+
+
     CreationShipsComputer(A);
     
     PrintPole(A, B);
@@ -52,7 +56,10 @@ void main()
 
     {
         if (inputCoordinate(&y, &x))
-            CheckUdarPerson(A, y,x);
+            if (CheckUdarPerson(A, y, x))
+                ShipQtyPC--;
+        if (ShipQtyPC == 0)
+            break;
 
 
 
@@ -60,7 +67,12 @@ void main()
 
     }
 
+    if (ShipQtyPC == 0)
+        printf("\n\n   URA URA URA We POBEDILI !!!!\n\n");
 
+
+
+    PrintPole(A, B);
 
 }
 
