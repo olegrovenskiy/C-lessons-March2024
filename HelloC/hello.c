@@ -38,26 +38,7 @@ void main()
     
     PrintPole(A, B);
 
-    int d = inputDirection();
-
-   
-
-
-
-    int y=0;
-    int x=0;
-    
-    /*
-    bool yes;
-
-   // yes=inputCoordinate(&y, &x);
-
-    if(yes)
-        printf("y= %d   x= %d  \n", y, x);
-    else
-        printf("false\n");
-*/
-
+  
     CreationShipsPerson(A, B);
 
 
@@ -247,7 +228,7 @@ void CreationShipsComputer(char A[10][10])
          if (direction == 0 || direction == 1)
              ok = 1;
          else
-             printf("Vvod not correct, please input one more");
+             printf("   Vvod not correct, please input one more");
      }
 
      return direction;
@@ -299,20 +280,16 @@ void CreationShipsComputer(char A[10][10])
      int y;
      int x;
      int inputShepPersonQ = 0;
-     int shipPersonOK;
+     bool shipPersonOK;
 
      for (int k = 0; k < 10; k++)
      {
        
-       shipPersonOK = 0;
+       shipPersonOK = false;
 
-       while (shipPersonOK == 0)
+       while (!shipPersonOK)
        {
-
-
-
            bool coordOK;
-
 
            if (inputShepPersonQ < 6)
                direction = inputDirection();
@@ -320,16 +297,13 @@ void CreationShipsComputer(char A[10][10])
                direction = 0;
 
 
-
            if (direction == 0)
            {
-
-
                coordOK = inputCoordinate(&y, &x);
                for (int i = 0; i < ship[inputShepPersonQ]; i++)
                {
                    if (B[y][x + i] != ' ')
-                       shipPersonOK = 1;
+                       shipPersonOK = true;
                }
 
                if (shipPersonOK == 0 && coordOK && x < (11 - ship[inputShepPersonQ]))
@@ -343,6 +317,34 @@ void CreationShipsComputer(char A[10][10])
 
                        ZoneAroundShip(B, direction, y, x, ship[inputShepPersonQ]);
 
+                   }
+                   inputShepPersonQ++;
+
+                   PrintPole(A, B);
+               }
+
+               else
+                   printf("   Input NOT CORRECT PLEASE REPEAT!!!\n");
+
+           }
+
+           else
+           {
+               coordOK = inputCoordinate(&y, &x);
+               for (int i = 0; i < ship[inputShepPersonQ]; i++)
+               {
+                   if (B[y+i][x] != ' ')
+                       shipPersonOK = true;
+               }
+
+               if (shipPersonOK == 0 && coordOK && x < (11 - ship[inputShepPersonQ]))
+               {
+                   for (int i = 0; i < ship[inputShepPersonQ]; i++)
+                   {
+
+                       B[y+i][x] = 'Y';
+
+                       ZoneAroundShip(B, direction, y, x, ship[inputShepPersonQ]);
 
                    }
                    inputShepPersonQ++;
@@ -351,12 +353,11 @@ void CreationShipsComputer(char A[10][10])
                }
 
                else
-                   printf("Input NOT CORRECT!!!");
+                   printf("   Input NOT CORRECT PLEASE REPEAT!!!\n");
+
 
 
            }
-
-
 
        }
 
