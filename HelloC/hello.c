@@ -37,9 +37,11 @@ void main()
     CreationShipsComputer(A);
     
     PrintPole(A, B);
-
-  
+      
     CreationShipsPerson(A, B);
+
+    printf("   All ships are created\n");
+    printf("   Startuem fire!!! First udar from Person\n");
 
 
 }
