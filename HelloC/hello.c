@@ -284,7 +284,7 @@ void CreationShipsComputer(char A[10][10])
 
      for (int k = 0; k < 10; k++)
      {
-       
+
        shipPersonOK = false;
 
        while (!shipPersonOK)
@@ -300,13 +300,15 @@ void CreationShipsComputer(char A[10][10])
            if (direction == 0)
            {
                coordOK = inputCoordinate(&y, &x);
+               shipPersonOK = true;
+
                for (int i = 0; i < ship[inputShepPersonQ]; i++)
                {
                    if (B[y][x + i] != ' ')
-                       shipPersonOK = true;
+                       shipPersonOK = false;
                }
 
-               if (shipPersonOK == 0 && coordOK && x < (11 - ship[inputShepPersonQ]))
+               if (shipPersonOK == true && coordOK && x < (11 - ship[inputShepPersonQ]))
                {
                    for (int i = 0; i < ship[inputShepPersonQ]; i++)
                    {
@@ -331,13 +333,14 @@ void CreationShipsComputer(char A[10][10])
            else
            {
                coordOK = inputCoordinate(&y, &x);
+               shipPersonOK = true;
                for (int i = 0; i < ship[inputShepPersonQ]; i++)
                {
                    if (B[y+i][x] != ' ')
-                       shipPersonOK = true;
+                       shipPersonOK = false;
                }
 
-               if (shipPersonOK == 0 && coordOK && x < (11 - ship[inputShepPersonQ]))
+               if (shipPersonOK == true && coordOK && x < (11 - ship[inputShepPersonQ]))
                {
                    for (int i = 0; i < ship[inputShepPersonQ]; i++)
                    {
