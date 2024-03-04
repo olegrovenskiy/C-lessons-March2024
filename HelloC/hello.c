@@ -35,7 +35,6 @@ void main()
         *(addrB + i) = ' ';
 
 
-    int ShipQtyPerson = 20;
     int ShipQtyPC = 20;
 
 
@@ -49,8 +48,35 @@ void main()
     printf("   Startuem fire!!! First udar from Person\n");
 
 
+    for (int i = 0; i < 10; i++)
+        for (int j = 0; j < 10; j++)
+        {
+            if(B[i][j]=='.')
+             B[i][j]=' ';
+        }
+
+
+
     int y;
     int x;
+
+
+    // PC part
+    int udarY;
+    int udarX;
+    int UdarCounterPC = 0;
+    int ShipQtyPerson = 20;
+
+    // FSM
+
+    int StateFsm = 1; //1-poisk ship-initial, 2-poisk napravleniya,3-rastrelint StateFsm=1; //1-poisk ship-initial, 2-poisk napravleniya,3-rastrel
+    int dirFsm = 0; //0-start, 2 vert UP, 1-go RIGHT, 4 vert DOWN, 3  gor LEFT 4- up up, 5 right right6 down down  7 left left
+    int udarFsm = 0; //0-mimo, 1- popal
+    int ship_4 = 1;
+    int ship_3 = 2;
+    int max; //q-ty of popal
+    int fromDirFsm = 0;
+
 
     while (1)
 
@@ -60,6 +86,130 @@ void main()
                 ShipQtyPC--;
         if (ShipQtyPC == 0)
             break;
+
+
+        //  udar pc
+
+        switch (StateFsm) {
+        case 1:  // prost udar 
+
+            if (UdarCounterPC == 0)
+            {
+                udarY=4;
+                udarX=4;
+
+                if (B[udarY][udarX] == 'Y') // popal
+                {
+                    StateFsm = 2;
+                    UdarCounterPC++;
+                    ShipQtyPerson--;
+                    B[udarY][udarX] = 'X';
+                }
+                else               // not popal
+                    UdarCounterPC++;
+            
+            }
+
+            break;
+
+        case 2:
+
+            // check UP
+            if ((udarY - 1) >= 0 && B[udarY - 2][udarX] != 'X' && B[udarY - 1][udarX] != 'o')  // up mesto est
+                if (B[udarY - 1][udarX] == 'Y') // popal up
+                {
+                    ShipQtyPerson--;
+                    fromDirFsm = 2; // verticalno
+                    StateFsm = 3;
+                }
+                else // ne popal
+                {
+                    B[udarY - 1][udarX] = 'o';
+
+                }
+
+
+
+            //check RIGHT
+            else if ((udarX + 1) <= 9 && B[udarY][udarX + 2] != 'X' && B[udarY][udarX + 1] != 'o') //rigt mesto est
+                if (B[udarY][udarX + 1] == 'Y') //popal
+                {
+                    ShipQtyPerson--;
+                    fromDirFsm = 1; // vpravo
+                    StateFsm = 3;
+                }
+                else
+                {
+                    B[udarY][udarX + 1] = 'o';
+
+                }
+
+
+
+            //check DOWN
+            else if ((udarY + 1) <= 9 && B[udarY + 2][udarX] != 'X' && B[udarY + 1][udarX] != 'o')
+                if (B[udarY + 1][udarX] == 'Y')
+                {
+                    ShipQtyPerson--;
+                    fromDirFsm = 4; // down
+                    StateFsm = 3;
+                }
+
+                else
+                {
+                    B[udarY + 1][udarX] = 'o';
+
+                }
+
+            //check LEFT
+            else if ((udarX - 1) >= 0 && B[udarY][udarX - 2] != 'X' && B[udarY][udarX - 1] != 'o')
+                if (B[udarY][udarX - 1] == 'Y')
+                {
+                    ShipQtyPerson--;
+                    fromDirFsm = 3; // left
+                    StateFsm = 3;
+
+                }
+
+                else
+                {
+                    B[udarY][udarX - 1] = 'o';
+                    StateFsm = 1;
+                }
+
+
+            else // oboshel po krugu, udar, esli mimo FSM 1,esli popal F                                                                                                                                                             SM2
+            {
+                if (UdarCounterPC == 1)
+                {
+                    udarY = 1;
+                    udarX = 2;
+
+                    if (B[udarY][udarX] == 'Y') // popal
+                    {
+                        StateFsm = 2;
+                        UdarCounterPC++;
+                        ShipQtyPerson--;
+                        B[udarY][udarX] = 'X';
+                    }
+                    else               // not popal
+                    {
+                        UdarCounterPC++;
+                        StateFsm = 1;
+                    }
+                }
+            }
+
+            break;
+
+        }
+
+
+
+        // end udar pc
+
+
+
 
 
 
@@ -372,6 +522,8 @@ void CreationShipsComputer(char A[10][10])
            }
        }
      }
+      
+
  }
 
  bool CheckUdarPerson(char A[10][10], int y, int x)
