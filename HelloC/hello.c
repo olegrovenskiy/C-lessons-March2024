@@ -13,7 +13,8 @@ bool inputCoordinate(int* y, int* x);
 void CreationShipsPerson(char A[10][10], char B[10][10]);
 
 bool CheckUdarPerson(char A[10][10], int y, int x);
-
+void udarPC(char Matrix[10][10], int* y, int* x);
+bool ChekerPlaceUdar(int direction, char M[10][10], int y, int x);
 
 
 void main()              
@@ -67,30 +68,38 @@ void main()
     int UdarCounterPC = 0;
     int ShipQtyPerson = 20;
 
+    int ship_4 = 1;
+    int ship_3 = 2;
+    int ship_2 = 3;
+
     // FSM
 
     int StateFsm = 1; //1-poisk ship-initial, 2-poisk napravleniya,3-rastrelint StateFsm=1; //1-poisk ship-initial, 2-poisk napravleniya,3-rastrel
-    int dirFsm = 0; //0-start, 2 vert UP, 1-go RIGHT, 4 vert DOWN, 3  gor LEFT 4- up up, 5 right right6 down down  7 left left
+    int dirFsm = 0; //0-start, 1 vert UP, 2-go RIGHT, 3 vert DOWN, 4  gor LEFT 
     int udarFsm = 0; //0-mimo, 1- popal
-    int ship_4 = 1;
-    int ship_3 = 2;
-    int max; //q-ty of popal
+    int max=0; //q-ty of popal
     int fromDirFsm = 0;
 
 
     while (1)
 
     {
+        // udar Person
+
         if (inputCoordinate(&y, &x))
             if (CheckUdarPerson(A, y, x))
                 ShipQtyPC--;
         if (ShipQtyPC == 0)
             break;
 
+        if (ShipQtyPerson == 0)
+            break;
+
 
         //  udar pc
 
-        switch (StateFsm) {
+        switch (StateFsm) 
+        {
         case 1:  // prost udar 
 
             if (UdarCounterPC == 0)
@@ -106,9 +115,114 @@ void main()
                     B[udarY][udarX] = 'X';
                 }
                 else               // not popal
+                {
                     UdarCounterPC++;
-            
+                    B[udarY][udarX] = 'o';
+                }
             }
+
+            else if (UdarCounterPC == 1)
+            {
+                udarY = 1;
+                udarX = 2;
+
+                if (B[udarY][udarX] == 'Y') // popal
+                {
+                    StateFsm = 2;
+                    UdarCounterPC++;
+                    ShipQtyPerson--;
+                    B[udarY][udarX] = 'X';
+                }
+                else               // not popal
+                {
+                    UdarCounterPC++;
+                    B[udarY][udarX] = 'o';
+                }
+            }
+
+            else if (UdarCounterPC == 2)
+            {
+                udarY = 1;
+                udarX = 7;
+
+                if (B[udarY][udarX] == 'Y') // popal
+                {
+                    StateFsm = 2;
+                    UdarCounterPC++;
+                    ShipQtyPerson--;
+                    B[udarY][udarX] = 'X';
+                }
+                else               // not popal
+                {
+                    UdarCounterPC++;
+                    B[udarY][udarX] = 'o';
+                }
+            }
+
+            else if (UdarCounterPC == 3)
+            {
+                udarY = 7;
+                udarX = 7;
+
+                if (B[udarY][udarX] == 'Y') // popal
+                {
+                    StateFsm = 2;
+                    UdarCounterPC++;
+                    ShipQtyPerson--;
+                    B[udarY][udarX] = 'X';
+                }
+                else               // not popal
+                {
+                    UdarCounterPC++;
+                    B[udarY][udarX] = 'o';
+                }
+            }
+
+            else if (UdarCounterPC == 4)
+            {
+                udarY = 7;
+                udarX = 2;
+
+                if (B[udarY][udarX] == 'Y') // popal
+                {
+                    StateFsm = 2;
+                    UdarCounterPC++;
+                    ShipQtyPerson--;
+                    B[udarY][udarX] = 'X';
+                }
+                else               // not popal
+                {
+                    UdarCounterPC++;
+                    B[udarY][udarX] = 'o';
+                }
+            }
+
+            else // posle udara 5 generator skuchainoi y and x
+            {
+
+                udarPC(B, &udarY, &udarX); //udar computera cherez function
+
+                if (B[udarY][udarX] == 'Y') // popal
+                {
+                    if(ship_4!=0||ship_3!=0||ship_2!=0) // if est 2, 3 or 4 palubn
+                        StateFsm = 2; // idem na chek napravleniya
+                    UdarCounterPC++;
+                    ShipQtyPerson--;
+                    B[udarY][udarX] = 'X';
+                }
+                else               // not popal
+                {
+                    UdarCounterPC++;
+                    B[udarY][udarX] = 'o';
+                }
+
+
+            }
+
+
+
+
+
 
             break;
 
@@ -118,8 +232,10 @@ void main()
             if ((udarY - 1) >= 0 && B[udarY - 2][udarX] != 'X' && B[udarY - 1][udarX] != 'o')  // up mesto est
                 if (B[udarY - 1][udarX] == 'Y') // popal up
                 {
+                    B[udarY - 1][udarX] = 'X';
                     ShipQtyPerson--;
-                    fromDirFsm = 2; // verticalno
+                    fromDirFsm = 0;
+                    dirFsm = 1;
                     StateFsm = 3;
                 }
                 else // ne popal
@@ -134,8 +250,10 @@ void main()
             else if ((udarX + 1) <= 9 && B[udarY][udarX + 2] != 'X' && B[udarY][udarX + 1] != 'o') //rigt mesto est
                 if (B[udarY][udarX + 1] == 'Y') //popal
                 {
+                    B[udarY][udarX + 1] = 'X';
                     ShipQtyPerson--;
-                    fromDirFsm = 1; // vpravo
+                    fromDirFsm = 0;
+                    dirFsm = 2;
                     StateFsm = 3;
                 }
                 else
@@ -150,8 +268,10 @@ void main()
             else if ((udarY + 1) <= 9 && B[udarY + 2][udarX] != 'X' && B[udarY + 1][udarX] != 'o')
                 if (B[udarY + 1][udarX] == 'Y')
                 {
+                    B[udarY + 1][udarX] = 'X';
                     ShipQtyPerson--;
-                    fromDirFsm = 4; // down
+                    fromDirFsm = 0;
+                    dirFsm = 3;
                     StateFsm = 3;
                 }
 
@@ -165,8 +285,10 @@ void main()
             else if ((udarX - 1) >= 0 && B[udarY][udarX - 2] != 'X' && B[udarY][udarX - 1] != 'o')
                 if (B[udarY][udarX - 1] == 'Y')
                 {
+                    B[udarY][udarX - 1] = 'X';
                     ShipQtyPerson--;
-                    fromDirFsm = 3; // left
+                    fromDirFsm = 0; 
+                    dirFsm = 4;
                     StateFsm = 3;
 
                 }
@@ -181,24 +303,205 @@ void main()
             else // oboshel po krugu, udar, esli mimo FSM 1,esli popal F                                                                                                                                                             SM2
             {
                 if (UdarCounterPC == 1)
-                {
-                    udarY = 1;
-                    udarX = 2;
-
-                    if (B[udarY][udarX] == 'Y') // popal
                     {
+                        udarY = 1;
+                        udarX = 2;
+
+                        if (B[udarY][udarX] == 'Y') // popal
+                        {
                         StateFsm = 2;
                         UdarCounterPC++;
                         ShipQtyPerson--;
                         B[udarY][udarX] = 'X';
-                    }
-                    else               // not popal
-                    {
+                        }
+                        else               // not popal
+                        {
                         UdarCounterPC++;
                         StateFsm = 1;
+                        B[udarY][udarX] = 'o';
+                        }
                     }
-                }
+
+                else if (UdarCounterPC == 2)
+                    {
+                        udarY = 1;
+                        udarX = 7;
+
+                        if (B[udarY][udarX] == 'Y') // popal
+                        {
+                        StateFsm = 2;
+                        UdarCounterPC++;
+                        ShipQtyPerson--;
+                        B[udarY][udarX] = 'X';
+                        }
+                        else               // not popal
+                        {
+                        UdarCounterPC++;
+                        StateFsm = 1;
+                        B[udarY][udarX] = 'o';
+                        }
+                    }
+
+                else if (UdarCounterPC == 3)
+                    {
+                        udarY = 7;
+                        udarX = 7;
+
+                        if (B[udarY][udarX] == 'Y') // popal
+                        {
+                        StateFsm = 2;
+                        UdarCounterPC++;
+                        ShipQtyPerson--;
+                        B[udarY][udarX] = 'X';
+                        }
+                        else               // not popal
+                        {
+                        UdarCounterPC++;
+                        StateFsm = 1;
+                        B[udarY][udarX] = 'o';
+                        }
+                    }
+
+                else if (UdarCounterPC == 4)
+                    {
+                        udarY = 7;
+                        udarX = 2;
+
+                        if (B[udarY][udarX] == 'Y') // popal
+                        {
+                        StateFsm = 2;
+                        UdarCounterPC++;
+                        ShipQtyPerson--;
+                        B[udarY][udarX] = 'X';
+                        }
+                        else               // not popal
+                        {
+                        UdarCounterPC++;
+                        StateFsm = 1;
+                        B[udarY][udarX] = 'o';
+                        }
+                    }
+
+
+                else // posle udara 5 generator skuchainoi y and x
+                    {
+
+                        udarPC(B, &udarY, &udarX); //udar computera cherez function
+
+                        if (B[udarY][udarX] == 'Y') // popal
+                        {
+                        StateFsm = 2;
+                        UdarCounterPC++;
+                        ShipQtyPerson--;
+                        B[udarY][udarX] = 'X';
+                        }
+                        else               // not popal
+                        {
+                        UdarCounterPC++;
+                        B[udarY][udarX] = 'o';
+                        }
+
+
+                    }
+
+
+
+
             }
+
+            break;
+
+         case 3:
+             switch (dirFsm)
+             {
+             case 1: // idem na vverx tretiy
+                    if (ChekerPlaceUdar(1, B, udarY-2, udarX)) // mesto est
+                    {
+                        if (B[udarY-2][udarX] == 'Y') // popal
+                        {
+                            StateFsm = 3;
+                            if (ChekerPlaceUdar(1, B, udarY-3, udarX))
+                            {
+                                dirFsm = 11;
+                                fromDirFsm = 1;
+                            }
+                            else
+                            {
+                                dirFsm = 3;
+                                fromDirFsm = 1;
+                            }
+                            UdarCounterPC++;
+                            ShipQtyPerson--;
+                            B[udarY-2][udarX] = 'X';
+                        }
+                        else               // not popal
+                        {
+                            UdarCounterPC++;
+                            B[udarY-2][udarX] = 'o';
+                            if (ChekerPlaceUdar(3, B, udarY+1, udarX))
+                            {
+                                dirFsm = 3;
+                                fromDirFsm = 1;
+                            }
+                            else
+                            {
+                                dirFsm = 0;
+                                fromDirFsm = 0;
+                                StateFsm = 1;
+                            }
+                        }
+                    }
+
+                  break;
+
+             case 2: //iden napravo na tretiy
+
+                   if (ChekerPlaceUdar(1, B, udarY, udarX+2)) // mesto est
+                    {
+                        if (B[udarY][udarX+2] == 'Y') // popal
+                        {
+                            StateFsm = 3;
+                            if (ChekerPlaceUdar(1, B, udarY, udarX + 3))
+                            {
+                                dirFsm = 22;
+                                fromDirFsm = 2;
+                            }
+                            else
+                            {
+                                dirFsm = 4;
+                                fromDirFsm = 2;
+                            }
+                            UdarCounterPC++;
+                            ShipQtyPerson--;
+                            B[udarY][udarX] = 'X';
+                        }
+                        else               // not popal
+                        {
+                            UdarCounterPC++;
+                            B[udarY][udarX + 2] = 'o';
+                            if (ChekerPlaceUdar(3, B, udarY, udarX - 1))
+                            {
+                                dirFsm = 4;
+                                fromDirFsm = 2;
+                            }
+                            else
+                            {
+                                dirFsm = 0;
+                                fromDirFsm = 0;
+                                StateFsm = 1;
+                            }
+                        }
+                    }
+
+
+                  break;
+
+
+
+             }
+
+
+
 
             break;
 
@@ -220,6 +523,9 @@ void main()
     if (ShipQtyPC == 0)
         printf("\n\n   URA URA URA We POBEDILI !!!!\n\n");
 
+
+    if (ShipQtyPerson == 0)
+        printf("\n\n   SORRY SORRY  POBEDIL COMPUTER !!!!\n\n");
 
 
     PrintPole(A, B);
@@ -540,4 +846,64 @@ void CreationShipsComputer(char A[10][10])
              return true;
          }
 
+ }
+
+ void udarPC(char Matrix[10][10], int* y, int* x)
+
+ {
+     srand(time(NULL));
+
+     int flag1 = 0;
+     int yy;
+     int xx;
+
+     while (flag1 == 0)
+     {
+         yy = rand() % 10;
+         xx = rand() % 10;
+         // printf("XX == %d\n", xx);
+         // printf("YY == %d\n", yy);
+
+         // add proverku dioganali
+         if (Matrix[yy][xx] != 'X' && Matrix[yy][xx] != 'o')
+             if ((xx - 1) >= 0 && Matrix[yy][xx - 1] != 'X' || xx == 0)
+                 if ((xx + 1) <= 9 && Matrix[yy][xx + 1] != 'X' || xx == 9)
+                     if ((yy - 1) >= 0 && Matrix[yy - 1][xx] != 'X' || yy == 0)
+                         if ((yy + 1) <= 9 && Matrix[yy + 1][xx] != 'X' || yy == 9)
+                             flag1 = 1;
+     }
+
+     *x = xx;
+     *y = yy;
+
+
+ }
+
+ bool ChekerPlaceUdar(int direction, char M[10][10], int y, int x)
+ {
+     //directin: 1-up, 2-right, 3-down, 4- left)
+
+     if (direction == 1) // up
+     {
+         if ((y - 1) >= 0 && M[y - 1][x] == ' ' && M[y - 2][x] != 'X' && M[y - 2][x - 1] != 'X' && M[y - 2][x + 1] != 'X')
+             return true;
+     }
+     else if (direction == 2) // right
+     {
+         if ((x + 1) <= 9 && M[y][x + 1] == ' ' && M[y][x + 2] != 'X' && M[y - 1][x + 2] != 'X' && M[y + 1][x + 2] != 'X')
+             return true;
+     }
+     else if (direction == 3) // down
+     {
+         if ((y + 1) <= 9 && M[y + 1][x] == ' ' && M[y + 2][x] != 'X' && M[y + 2][x - 1] != 'X' && M[y + 2][x + 1] != 'X')
+             return true;
+     }
+     else if (direction == 4) // left
+     {
+         if ((x - 1) >= 0 && M[y][x - 1] == ' ' && M[y][x - 2] != 'X' && M[y - 1][x - 2] != 'X' && M[y + 1][x - 2] != 'X')
+             return true;
+     }
+
+     else
+         return false;
  }
